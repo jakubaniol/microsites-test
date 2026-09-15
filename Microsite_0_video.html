@@ -330,14 +330,13 @@
      #qrCodeInfo {
       display: -webkit-box; display: flex;
       -webkit-box-orient: vertical; flex-direction: column;
-      -webkit-box-align: start; align-items: flex-start;  /* ← z center na flex-start */
+      -webkit-box-align: start; align-items: flex-start;
       width: 100%;
       flex: 1;
       box-sizing: border-box;
       padding: 0 16px;
       gap: 10px;
       font-weight: 500;
-      
     }
 
     #qrCodeHeader {
@@ -411,7 +410,7 @@
 
   <script>
     var DEBUG = false;
-    var payload = {"background":{"image1920x1080":"http://localhost:3000/files/k_/joPuiDoEYB5WZKl4iJA/3840x2160_below_1MB.jpg","image3840x2160":"http://localhost:3000/files/k_/joPuiDoEYB5WZKl4iJA/3840x2160_below_1MB.jpg","image1280x720":"http://localhost:3000/files/k_/joPuiDoEYB5WZKl4iJA/3840x2160_below_1MB.jpg"},"videos":[],"apps":[],"tracking":[{"pageViewTracker":"","exitTrackerBase":""}],"tracking3p":{"impressionTrackers":[],"exitTracker":""},"fastSpeed":10,"micrositeId":51,"deliveryHost":"rtb-canary.adgrx.com","qrcode":{"action_text":"Scan to learn more","header":"header na 18znakó","description":"description description description description descr na 66 znaków","legal_disclaimer":"When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.","color_mode":"dark"}};
+    var payload = {"background":{"image1920x1080":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image3840x2160":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image1280x720":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"},"videos":[],"apps":[],"tracking":[{"pageViewTracker":"","exitTrackerBase":""}],"tracking3p":{"impressionTrackers":[],"exitTracker":""},"fastSpeed":10,"micrositeId":51,"deliveryHost":"rtb-canary.adgrx.com","qrcode":{"action_text":"Scan to learn more","header":"header na 18znakó","description":"description description description description descr na 66 znaków","legal_disclaimer":"When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.","color_mode":"dark"}};
   </script>
 
   <script>
@@ -854,7 +853,7 @@
   };
 })();
 
-  </script><style type="text/css">#micrositeBackground { background-image: url("http://localhost:3000/files/k_/joPuiDoEYB5WZKl4iJA/3840x2160_below_1MB.jpg"); } @media (max-width: 1280px) { #micrositeBackground { background-image: url("http://localhost:3000/files/k_/joPuiDoEYB5WZKl4iJA/3840x2160_below_1MB.jpg"); } }</style>
+  </script><style type="text/css">#micrositeBackground { background-image: url("microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"); } @media (max-width: 1280px) { #micrositeBackground { background-image: url("microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"); } }</style>
 
   <script>
     // METRICS — ES5
@@ -1303,10 +1302,10 @@
   <div id="log"></div>
 
   <!-- Native-resolution background layer (see _hydrator.js#applyNativeBackground) -->
-  <div id="micrositeBackground"></div>
+  <div id="micrositeBackground"><img src="./Microsite_0_video_files/3c783c6c6d02de0a75093d7a89298c92.jpg" style="width:100%;height:100%;object-fit:cover" alt=""></div>
 
   <!-- Main layout -->
-  <div class="microsite qr-dark" style="transform: scale(0.654167); margin-left: 0px; margin-top: 0px;">
+  <div class="microsite qr-dark" style="transform: scale(0.524479); margin-left: 0px; margin-top: 0px;">
 
     <!-- Left content area: video + thumbnails + apps -->
     <div id="contentLeft">
@@ -1348,7 +1347,7 @@
         <div id="exitButton" class="navigable selected" title="Exit">↩</div>
       </a>
     </div>
-  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com%2Fpl%2F" style="left: 144px; top: 584px; height: 352px; width: 872px;"><div id="qrCodeCore" style="height: 352px; width: 307px;"><div id="qrCodeCard"><canvas id="qrCodeCanvas" width="275" height="275"></canvas></div><div id="qrCodeActionText" style="font-size: 24px;">Scan to learn more</div></div><div id="qrCodeInfo"><div id="qrCodeHeader">header na 18znakó</div><div id="qrCodeDescription">description description description description descr na 66 znaków</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
+  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 144px; top: 584px; height: 352px; width: 872px;"><div id="qrCodeCore" style="height: 352px; width: 307px;"><div id="qrCodeCard"><canvas id="qrCodeCanvas" width="275" height="275"></canvas></div><div id="qrCodeActionText" style="font-size: 24px;">Scan to learn more</div></div><div id="qrCodeInfo"><div id="qrCodeHeader">header na 18znakó</div><div id="qrCodeDescription">description description description description descr na 66 znaków</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
 
   <script>
     // CORE-TIZEN — ES5
@@ -3661,7 +3660,7 @@ var MicrositeUserInput = (function () {
                   appData.appId,
                   appData.appType,
                   appData.deeplink,
-                  appData.tizenId
+                  appData.tizenId,
                 );
               }
             }
@@ -4265,13 +4264,16 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
  * /scans endpoint. Two different data sources feed it:
  *   - payload.qrcode: per-microsite data baked into the static HTML at
  *     generation time (see generate_html.rb's build_payload). Contains:
- *     target_url: final destination URL (from microsite_qrcode DB record).
  *     action_text: caption shown below the QR code.
  *     header/description: informational text alongside the QR.
  *     legal_disclaimer: legal disclaimer revealed alongside the QR code.
  *   - window._ms.params: per-ad-serve query params parsed by _hydrator.js
  *     from the page URL at request time. Contains:
  *     adid: "<campaign_id>-<flight_id>-<creative_id>-<creative_id>".
+ *     target_url: final destination URL encoded into the QR. Injected by
+ *     rtb-delivery as a query param at delivery time (separately from the
+ *     standard MICROSITE_DELIVERY_MACROS tokens) — NOT baked in from the
+ *     QrCode DB record, which only feeds the UI/validation side.
  * The QR is only rendered when target_url is present — absence means this
  * microsite has no QR code configured. The legal disclaimer (always embedded
  * in the static HTML, hidden by default) is revealed here too, so it only
@@ -4284,14 +4286,9 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
  * canary per buyer).
  */
 (function () {
-  // Matches the Figma spec: 300x300 white card, 13.83px padding on every side.
+  // White card sizes: 275px (0 videos) / 206px (1+ videos).
   var QR_CARD_BIG_SIZE = 275;
   var QR_CARD_SMALL_SIZE = 206;
-  var QR_CARD_PADDING = 13.83;
-  var QR_CONTENT_BIG_SIZE = Math.round(QR_CARD_BIG_SIZE - 2 * QR_CARD_PADDING);
-  var QR_CONTENT_SMALL_SIZE = Math.round(
-    QR_CARD_SMALL_SIZE - 2 * QR_CARD_PADDING,
-  );
   qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
 
   function parseAdid(adid) {
@@ -4311,8 +4308,8 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
   }
 
   // Renders into a fixed targetSize regardless of module count, so the QR
-  // always fills the same visual footprint (the 272x272 content area inside
-  // the 300x300 card) no matter how long target_url is.
+  // always fills the same visual footprint (the whole 275x275 / 206x206 card)
+  // no matter how long target_url is.
   function renderQrToCanvas(qr, canvas, targetSize) {
     var count = qr.getModuleCount();
     var moduleSize = targetSize / count;
@@ -4418,11 +4415,7 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
     var params = ms.params || {};
     var qrcode = (payload && payload.qrcode) || {};
 
-    var targetUrl = params.target_url ?? "https://www.samsung.com/pl/";
-    
-    console.log(targetUrl)
-
-
+    var targetUrl = params.target_url || "https://www.samsung.com";
     if (!targetUrl) return;
 
     // Validate scheme — only http/https allowed (defense-in-depth, even
@@ -4459,7 +4452,11 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
       );
       renderDisclaimer(qrCodeDisclaimer);
     } catch (e) {
-      console.error("QR code generation failed:", e);
+      // qr.make() throws "code length overflow" when scansUrl exceeds QR
+      // version 40 capacity (~2331 bytes at EC level M).
+      if (window.console && console.error) {
+        console.error("QR code generation failed:", e);
+      }
     }
 
     var videoCount =
@@ -4470,7 +4467,6 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
     var section = document.getElementById("qrCodeSection");
     var qrCodeCore = document.getElementById("qrCodeCore");
     var actionText = document.getElementById("qrCodeActionText");
-    var disclaimerText = document.getElementById("qrCodeLegalDisclaimer");
 
     if (section) {
       if (videoCount === 0) {
@@ -4510,7 +4506,57 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
 <script>
   /* ---- browser-preview shim (injected by rake microsites:preview) ---- */
   (function () {
+    // Remove QR elements saved from a previous render to prevent
+    // duplicates when initQrCode runs again on DOMContentLoaded
+    // (e.g. after "Save Page As" and reopening via file://).
+    function cleanupStaleQrElements() {
+      var staleQr = document.getElementById('qrCodeSection');
+      if (staleQr) staleQr.parentNode.removeChild(staleQr);
+      var staleDisclaimer = document.getElementById('qrCodeLegalDisclaimer');
+      if (staleDisclaimer) staleDisclaimer.parentNode.removeChild(staleDisclaimer);
+    }
+
+    // Run immediately (before DOMContentLoaded) so stale QR elements
+    // saved by "Save Page As" are gone before initQrCode re-runs.
+    cleanupStaleQrElements();
+
+    // "Save Page As" rewrites src in static <img>/<source> tags to
+    // point into the saved-files folder (e.g. "Microsite_1_video_files/"),
+    // but it does NOT rewrite URLs inside JavaScript strings (the payload).
+    // So when the page loads from file://, the JS hydrator uses the
+    // original relative URLs which no longer resolve. Fix: read the
+    // already-rewritten src from the static <img>/<source> elements and
+    // patch the payload before bootMicrosite() runs.
+    function fixPayloadUrlsAfterSave() {
+      // Background
+      var bgImg = document.querySelector('#micrositeBackground img');
+      if (bgImg && bgImg.src) {
+        var bgPath = bgImg.getAttribute('src');
+        if (payload.background) {
+          payload.background.image1920x1080 = bgPath;
+          payload.background.image1280x720  = bgPath;
+          payload.background.image3840x2160 = bgPath;
+        }
+      }
+
+      // Video — read from #videoUrlHint (a hidden <img> whose src is
+      // always rewritten by "Save Page As", unlike <source> in <video>).
+      var vHint = document.getElementById('videoUrlHint');
+      if (vHint && vHint.getAttribute('src')) {
+        var vPath = vHint.getAttribute('src');
+        if (payload.videos && payload.videos.length) {
+          payload.videos.forEach(function (v) {
+            v.mp4Url = vPath;
+            v.vidUrl = vPath;
+          });
+        }
+      }
+    }
+
     function bootMicrosite() {
+      // Fix payload URLs for file:// (after "Save Page As")
+      fixPayloadUrlsAfterSave();
+
       payload.videos.forEach(function (v) {
         if (!v.mp4Url) { v.mp4Url = 'microsite_assets/Gaming_video.mp4'; }
         if (!v.vidUrl) { v.vidUrl = v.mp4Url; }

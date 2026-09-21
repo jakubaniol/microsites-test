@@ -4288,52 +4288,91 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
  * canary per buyer).
  */
 (function () {
-  window.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    function getRenderedFont(element) {
-      var computedStyle = window.getComputedStyle(element);
-      var fontFamily = computedStyle.fontFamily;
-      // Lista czcionek z CSS (po przecinku)
-      var fonts = fontFamily.split(',').map(function(f) {
-        return f.trim().replace(/['"]/g, '');
-      });
-      
-      // Tekst do pomiaru
-      var testText = 'mmmmmmmmmmmmlliwwwwwwwwww';
-      var testSize = computedStyle.fontSize || '16px';
-      
-      // Mierz szerokość dla monospace (baseline)
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('2d');
-      ctx.font = testSize + ' monospace';
-      var baselineWidth = ctx.measureText(testText).width;
-      
-      // Mierz każdą czcionkę z listy
-      var renderedFont = fonts[fonts.length - 1]; // fallback
-      for (var i = 0; i < fonts.length; i++) {
-        ctx.font = testSize + " '" + fonts[i] + "', monospace";
-        var width = ctx.measureText(testText).width;
-        // Jeśli szerokość się różni od baseline, ta czcionka istnieje
-        if (Math.abs(width - baselineWidth) > 0.5) {
-          renderedFont = fonts[i];
-          break; // pierwsza pasująca = ta użyta przez przeglądarkę
+  window.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+      function detectRenderedFont(element) {
+        var computed = window.getComputedStyle(element);
+        var declared = computed.fontFamily;
+        var fontSize = computed.fontSize;
+        var testText = "mmmmmmmmmmmmmmmmlliwwwwwwwwwwww";
+
+        // Baseline: monospace
+        var baseline = document.createElement("span");
+        baseline.style.cssText =
+          "position:absolute;visibility:hidden;font-size:" +
+          fontSize +
+          ";font-family:monospace;white-space:nowrap;";
+        baseline.textContent = testText;
+        document.body.appendChild(baseline);
+        var baselineWidth = baseline.offsetWidth;
+
+        // Test sans-serif (default fallback)
+        var sans = document.createElement("span");
+        sans.style.cssText =
+          "position:absolute;visibility:hidden;font-size:" +
+          fontSize +
+          ";font-family:sans-serif;white-space:nowrap;";
+        sans.textContent = testText;
+        document.body.appendChild(sans);
+        var sansWidth = sans.offsetWidth;
+
+        // Test each declared font
+        var fonts = declared.split(",").map(function (f) {
+          return f.trim().replace(/['"]/g, "");
+        });
+
+        var rendered = "sans-serif (fallback)";
+        for (var i = 0; i < fonts.length; i++) {
+          var test = document.createElement("span");
+          test.style.cssText =
+            "position:absolute;visibility:hidden;font-size:" +
+            fontSize +
+            ";font-family:'" +
+            fonts[i] +
+            "',monospace;white-space:nowrap;";
+          test.textContent = testText;
+          document.body.appendChild(test);
+          var w = test.offsetWidth;
+          // If width differs from monospace baseline, font is available
+          if (Math.abs(w - baselineWidth) > 1) {
+            rendered = fonts[i];
+            break;
+          }
+          test.remove();
         }
+
+        baseline.remove();
+        sans.remove();
+
+        return {
+          declared: declared,
+          rendered: rendered,
+          monospaceWidth: baselineWidth,
+          sansSerifWidth: sansWidth,
+        };
       }
-      return renderedFont;
-    }
 
-    var el = document.querySelector('.microsite');
-    var rendered = getRenderedFont(el);
-    var declared = window.getComputedStyle(el).fontFamily;
+      var el = document.querySelector(".microsite");
+      var result = detectRenderedFont(el);
 
-    var div = document.createElement('div');
-    div.style.cssText = 'position:fixed;top:0;left:0;background:black;color:lime;font-size:24px;z-index:99999;padding:20px;font-family:monospace;white-space:pre;line-height:1.5;';
-    div.textContent = 
-      'ZADEKLAROWANA: ' + declared + '\n' +
-      'WYRENDEROWANA: ' + rendered;
-    document.body.appendChild(div);
-  }, 2000);
-});
+      var div = document.createElement("div");
+      div.style.cssText =
+        "position:fixed;top:0;left:0;background:black;color:lime;font-size:20px;z-index:99999;padding:20px;font-family:monospace;white-space:pre;line-height:1.5;";
+      div.textContent =
+        "ZADEKLAROWANA: " +
+        result.declared +
+        "\n" +
+        "WYRENDEROWANA: " +
+        result.rendered +
+        "\n" +
+        "monospace width: " +
+        result.monospaceWidth +
+        "\n" +
+        "sans-serif width: " +
+        result.sansSerifWidth;
+      document.body.appendChild(div);
+    }, 2000);
+  });
 
   // White card sizes: 275px (0 videos) / 206px (1+ videos).
   var QR_CARD_BIG_SIZE = 275;
@@ -4684,5 +4723,7 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
 </script>
 
 
-<div style="position: fixed; top: 0px; left: 0px; background: black; color: lime; font-size: 24px; z-index: 99999; padding: 20px; font-family: monospace; white-space: pre; line-height: 1.5;">ZADEKLAROWANA: SamsungOneUI, "One UI Sans APP", Arial, Helvetica, sans-serif
-WYRENDEROWANA: Arial</div></body></html>
+<span style="position: absolute; visibility: hidden; font-size: 16px; font-family: Arial, monospace; white-space: nowrap;">mmmmmmmmmmmmmmmmlliwwwwwwwwwwww</span><div style="position: fixed; top: 0px; left: 0px; background: black; color: lime; font-size: 20px; z-index: 99999; padding: 20px; font-family: monospace; white-space: pre; line-height: 1.5;">ZADEKLAROWANA: SamsungOneUI, "One UI Sans APP", Arial, Helvetica, sans-serif
+WYRENDEROWANA: Arial
+monospace width: 299
+sans-serif width: 363</div></body></html>

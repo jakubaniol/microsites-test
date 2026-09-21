@@ -1305,7 +1305,7 @@
   <div id="micrositeBackground"><img src="./Microsite_03_video_files/3c783c6c6d02de0a75093d7a89298c92.jpg" style="width:100%;height:100%;object-fit:cover" alt=""></div>
 
   <!-- Main layout -->
-  <div class="microsite qr-light" style="transform: scale(0.480208); margin-left: 0px; margin-top: 0px;">
+  <div class="microsite qr-light" style="transform: scale(0.889815); margin-left: 0px; margin-top: 0px;">
 
     <!-- Left content area: video + thumbnails + apps -->
     <div id="contentLeft">
@@ -4374,6 +4374,29 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
     }, 2000);
   });
 
+  window.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    var testText = 'Samsung One UI Test 1234';
+    var fonts = [
+      { name: 'One UI Sans APP', css: "'One UI Sans APP', sans-serif" },
+      { name: 'sans-serif', css: "sans-serif" },
+      { name: 'monospace', css: "monospace" }
+    ];
+    
+    var container = document.createElement('div');
+    container.style.cssText = 'position:fixed;top:0;left:0;background:black;z-index:99999;padding:20px;';
+    
+    fonts.forEach(function(f) {
+      var div = document.createElement('div');
+      div.style.cssText = 'color:lime;font-size:32px;font-family:' + f.css + ';margin:10px 0;';
+      div.textContent = f.name + ': ' + testText;
+      container.appendChild(div);
+    });
+    
+    document.body.appendChild(container);
+  }, 2000);
+});
+
   // White card sizes: 275px (0 videos) / 206px (1+ videos).
   var QR_CARD_BIG_SIZE = 275;
   var QR_CARD_SMALL_SIZE = 206;
@@ -4726,4 +4749,4 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
 <span style="position: absolute; visibility: hidden; font-size: 16px; font-family: Arial, monospace; white-space: nowrap;">mmmmmmmmmmmmmmmmlliwwwwwwwwwwww</span><div style="position: fixed; top: 0px; left: 0px; background: black; color: lime; font-size: 20px; z-index: 99999; padding: 20px; font-family: monospace; white-space: pre; line-height: 1.5;">ZADEKLAROWANA: SamsungOneUI, "One UI Sans APP", Arial, Helvetica, sans-serif
 WYRENDEROWANA: Arial
 monospace width: 299
-sans-serif width: 363</div></body></html>
+sans-serif width: 363</div><div style="position: fixed; top: 0px; left: 0px; background: black; z-index: 99999; padding: 20px;"><div style="color: lime; font-size: 32px; font-family: &quot;One UI Sans APP&quot;, sans-serif; margin: 10px 0px;">One UI Sans APP: Samsung One UI Test 1234</div><div style="color: lime; font-size: 32px; font-family: sans-serif; margin: 10px 0px;">sans-serif: Samsung One UI Test 1234</div><div style="color: lime; font-size: 32px; font-family: monospace; margin: 10px 0px;">monospace: Samsung One UI Test 1234</div></div></body></html>

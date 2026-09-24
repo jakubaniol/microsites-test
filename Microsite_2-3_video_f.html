@@ -345,8 +345,8 @@
         width: 100%;
         flex: 1;
         box-sizing: border-box;
-        padding-left: 90px;
-        gap: 10px;
+        padding-left: 48px;
+        gap: 16px;
       }
 
       #qrCodeHeader {
@@ -422,7 +422,7 @@
 
   <script>
     var DEBUG = false;
-    var payload = {"background":{"image1920x1080":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image3840x2160":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image1280x720":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"},"videos":[{"id":"vidTh1","position":0,"vidTitle":"Video 1","mp4Url":"microsite_assets/8aef151250e2ae887c4b8a57b657d64d.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}},{"id":"vidTh2","position":1,"vidTitle":"Video 2","mp4Url":"microsite_assets/403240139303b711949fcd257aac0158.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}},{"id":"vidTh3","position":2,"vidTitle":"Video 3","mp4Url":"microsite_assets/a29dd468ec3247482f220a8bde8b3371.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}}],"apps":[],"tracking":[{"pageViewTracker":"","exitTrackerBase":""}],"tracking3p":{"impressionTrackers":[],"exitTracker":""},"fastSpeed":10,"micrositeId":51,"deliveryHost":"rtb-canary.adgrx.com","qrcode":{"action_text":"Action text Action text max 30","header":"head head head max20","description":"description description description descr ption description desc max70","legal_disclaimer":"When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.","color_mode":"light"}};
+    var payload = {"background":{"image1920x1080":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image3840x2160":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image1280x720":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"},"videos":[{"id":"vidTh1","position":0,"vidTitle":"Video 1","mp4Url":"microsite_assets/ec0932d1edbaa98aadff101ffcc7c829.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}},{"id":"vidTh2","position":1,"vidTitle":"Video 2","mp4Url":"microsite_assets/f3d687bee4665be28b60c1b5f1622365.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}},{"id":"vidTh3","position":2,"vidTitle":"Video 3","mp4Url":"microsite_assets/cb2a83fef9509293b060f94d0a1540d9.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}}],"apps":[],"tracking":[{"pageViewTracker":"","exitTrackerBase":""}],"tracking3p":{"impressionTrackers":[],"exitTracker":""},"fastSpeed":10,"micrositeId":51,"deliveryHost":"rtb-canary.adgrx.com","qrcode":{"action_text":"Action text Action text max 30","header":"head head head max20","description":"description description description descr ption description desc max70","legal_disclaimer":"When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.","color_mode":"light"}};
   </script>
 
   <script>
@@ -1330,7 +1330,7 @@
              expect it to exist even on a video-less microsite. -->
         <div class="videoContainer" data-section="video">
           <video id="videoPlayerBox" preload="auto" autoplay="" ontimeupdate="VideoControls.updateProgressBar()">
-            <source id="videoPlayer" src="microsite_assets/8aef151250e2ae887c4b8a57b657d64d.mp4" type="video/mp4">
+            <source id="videoPlayer" src="microsite_assets/ec0932d1edbaa98aadff101ffcc7c829.mp4" type="video/mp4">
           </video>
           <div id="videoLoader" style="background-image: none; display: none;"></div>
 
@@ -1343,8 +1343,8 @@
               </button>
             </a>
             <a href="javascript:void(0);"><button id="rewind" type="button">↻</button></a>
-            <span id="videoDuration">00:00:02 / 00:00:00</span>
-            <progress id="progressBar" value="96.05948113580317" min="0" max="100" style="appearance: none;"></progress>
+            <span id="videoDuration">00:00:01 / 00:00:00</span>
+            <progress id="progressBar" value="51.56328626149356" min="0" max="100" style="appearance: none;"></progress>
           </div>
         </div>
 
@@ -1365,7 +1365,7 @@
         <div id="exitButton" class="navigable" title="Exit">↩</div>
       </a>
     </div>
-  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 1184px; top: 719px; width: 648px; flex-direction: row-reverse;"><div id="qrCodeCore" style="min-height: 252px; width: 220px;"><div id="qrCodeCard" style="margin: 8px;"><canvas id="qrCodeCanvas" width="204" height="204"></canvas></div><div id="qrCodeActionText" style="margin: 8px 16px;">Action text Action text max 30</div></div><div id="qrCodeInfo" style="padding: 0px 33px 0px 0px;"><div id="qrCodeHeader">head head head max20</div><div id="qrCodeDescription">description description description descr ption description desc max70</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
+  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 1184px; top: 719px; width: 648px; flex-direction: row-reverse;"><div id="qrCodeCore" style="min-height: 252px; width: 220px;"><div id="qrCodeCard" style="margin: 10px 10px 0px;"><canvas id="qrCodeCanvas" width="200" height="200"></canvas></div><div id="qrCodeActionText" style="margin: 10px;">Action text Action text max 30</div></div><div id="qrCodeInfo" style="padding: 0px 32px 0px 44px;"><div id="qrCodeHeader">head head head max20</div><div id="qrCodeDescription">description description description descr ption description desc max70</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
 
   <script>
     // CORE-TIZEN — ES5
@@ -4308,7 +4308,7 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
 (function () {
   // White card sizes: 275px (0 videos) / 206px (1+ videos).
   var QR_CARD_BIG_SIZE = 275;
-  var QR_CARD_SMALL_SIZE = 204;
+  var QR_CARD_SMALL_SIZE = 200;
   qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
 
   function buildScansUrl(deliveryHost, flightId, creativeId, targetUrl) {
@@ -4488,9 +4488,10 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
         section.style.width = "872px";
         qrCodeCore.style.minHeight = "352px";
         qrCodeCore.style.width = "307px";
-        qrCodeCard.style.margin = "16px 16px 0";
         actionText.style.fontSize = "24px";
-        actionText.style.margin = "12px 20px 8px";
+        qrCodeCard.style.margin = "16px 16px 0px";
+        qrCodeInfo.style.gap = "20px";
+        actionText.style.margin = "16px 16px 16px";
         header.style.fontSize = "40px";
         description.style.fontSize = "24px";
       } else if (videoCount === 1) {
@@ -4499,8 +4500,8 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
         section.style.width = "1008px";
         qrCodeCore.style.minHeight = "252px";
         qrCodeCore.style.width = "220px";
-        qrCodeCard.style.margin = "8px 8px 0px";
-        actionText.style.margin = "8px 16px 8px";
+        qrCodeCard.style.margin = "10px 10px 0px";
+        actionText.style.margin = "10px 10px 10px";
       } else {
         section.style.left = "1184px";
         section.style.top = "719px";
@@ -4508,9 +4509,9 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
         section.style.flexDirection = "row-reverse";
         qrCodeCore.style.minHeight = "252px";
         qrCodeCore.style.width = "220px";
-        qrCodeCard.style.margin = "8px 8px";
-        qrCodeInfo.style.padding= "0px 33px 0px 0px";
-        actionText.style.margin = "8px 16px 8px";
+        qrCodeInfo.style.padding= "0px 32px 0px 44px";
+        qrCodeCard.style.margin = "10px 10px 0px";
+        actionText.style.margin = "10px 10px 10px";
       }
     }
   }
@@ -4658,6 +4659,6 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
   }());
   /* ---- end browser-preview shim ---- */
 </script>
-<img id="videoUrlHint" src="./Microsite_2-3_video_f_files/8aef151250e2ae887c4b8a57b657d64d.mp4" style="display:none;width:0;height:0" alt="">
+<img id="videoUrlHint" src="./Microsite_2-3_video_f_files/ec0932d1edbaa98aadff101ffcc7c829.mp4" style="display:none;width:0;height:0" alt="">
 
 </body></html>

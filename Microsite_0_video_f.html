@@ -345,8 +345,8 @@
         width: 100%;
         flex: 1;
         box-sizing: border-box;
-        padding-left: 90px;
-        gap: 10px;
+        padding-left: 48px;
+        gap: 16px;
       }
 
       #qrCodeHeader {
@@ -1359,7 +1359,7 @@
         <div id="exitButton" class="navigable selected" title="Exit">↩</div>
       </a>
     </div>
-  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 144px; top: 584px; width: 872px;"><div id="qrCodeCore" style="min-height: 352px; width: 307px;"><div id="qrCodeCard" style="margin: 16px 16px 0px;"><canvas id="qrCodeCanvas" width="275" height="275"></canvas></div><div id="qrCodeActionText" style="font-size: 24px; margin: 12px 20px 8px;">Action text Action text max 30</div></div><div id="qrCodeInfo"><div id="qrCodeHeader" style="font-size: 40px;">head head head max20</div><div id="qrCodeDescription" style="font-size: 24px;">description description description descr ption description desc max70</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
+  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 144px; top: 584px; width: 872px;"><div id="qrCodeCore" style="min-height: 352px; width: 307px;"><div id="qrCodeCard" style="margin: 16px 16px 0px;"><canvas id="qrCodeCanvas" width="275" height="275"></canvas></div><div id="qrCodeActionText" style="font-size: 24px; margin: 16px;">Action text Action text max 30</div></div><div id="qrCodeInfo" style="gap: 20px;"><div id="qrCodeHeader" style="font-size: 40px;">head head head max20</div><div id="qrCodeDescription" style="font-size: 24px;">description description description descr ption description desc max70</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
 
   <script>
     // CORE-TIZEN — ES5
@@ -4302,7 +4302,7 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
 (function () {
   // White card sizes: 275px (0 videos) / 206px (1+ videos).
   var QR_CARD_BIG_SIZE = 275;
-  var QR_CARD_SMALL_SIZE = 204;
+  var QR_CARD_SMALL_SIZE = 200;
   qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
 
   function buildScansUrl(deliveryHost, flightId, creativeId, targetUrl) {
@@ -4482,9 +4482,10 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
         section.style.width = "872px";
         qrCodeCore.style.minHeight = "352px";
         qrCodeCore.style.width = "307px";
-        qrCodeCard.style.margin = "16px 16px 0";
         actionText.style.fontSize = "24px";
-        actionText.style.margin = "12px 20px 8px";
+        qrCodeCard.style.margin = "16px 16px 0px";
+        qrCodeInfo.style.gap = "20px";
+        actionText.style.margin = "16px 16px 16px";
         header.style.fontSize = "40px";
         description.style.fontSize = "24px";
       } else if (videoCount === 1) {
@@ -4493,8 +4494,8 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
         section.style.width = "1008px";
         qrCodeCore.style.minHeight = "252px";
         qrCodeCore.style.width = "220px";
-        qrCodeCard.style.margin = "8px 8px 0px";
-        actionText.style.margin = "8px 16px 8px";
+        qrCodeCard.style.margin = "10px 10px 0px";
+        actionText.style.margin = "10px 10px 10px";
       } else {
         section.style.left = "1184px";
         section.style.top = "719px";
@@ -4502,9 +4503,9 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
         section.style.flexDirection = "row-reverse";
         qrCodeCore.style.minHeight = "252px";
         qrCodeCore.style.width = "220px";
-        qrCodeCard.style.margin = "8px 8px";
-        qrCodeInfo.style.padding= "0px 33px 0px 0px";
-        actionText.style.margin = "8px 16px 8px";
+        qrCodeInfo.style.padding= "0px 32px 0px 44px";
+        qrCodeCard.style.margin = "10px 10px 0px";
+        actionText.style.margin = "10px 10px 10px";
       }
     }
   }

@@ -422,7 +422,7 @@
 
   <script>
     var DEBUG = false;
-    var payload = {"background":{"image1920x1080":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image3840x2160":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image1280x720":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"},"videos":[],"apps":[],"tracking":[{"pageViewTracker":"","exitTrackerBase":""}],"tracking3p":{"impressionTrackers":[],"exitTracker":""},"fastSpeed":10,"micrositeId":51,"deliveryHost":"rtb-canary.adgrx.com","qrcode":{"action_text":"Action text Action text max 30","header":"head head head max20","description":"description description description descr ption description desc max70","legal_disclaimer":"When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.","color_mode":"light"}};
+    var payload = {"background":{"image1920x1080":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image3840x2160":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg","image1280x720":"microsite_assets/3c783c6c6d02de0a75093d7a89298c92.jpg"},"videos":[{"id":"vidTh1","position":0,"vidTitle":"Video 1","mp4Url":"microsite_assets/8aef151250e2ae887c4b8a57b657d64d.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}},{"id":"vidTh2","position":1,"vidTitle":"Video 2","mp4Url":"microsite_assets/403240139303b711949fcd257aac0158.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}},{"id":"vidTh3","position":2,"vidTitle":"Video 3","mp4Url":"microsite_assets/a29dd468ec3247482f220a8bde8b3371.mp4","dashUrl":"","ismUrl":"","posterUrl":"","variants":{},"tracking":[{"videoStartTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":"","clickTracker":""}],"tracking3p":{"impressionTrackers":[],"startTracker":"","firstQuartileTracker":"","midpointTracker":"","thirdQuartileTracker":"","completeTracker":""}}],"apps":[],"tracking":[{"pageViewTracker":"","exitTrackerBase":""}],"tracking3p":{"impressionTrackers":[],"exitTracker":""},"fastSpeed":10,"micrositeId":51,"deliveryHost":"rtb-canary.adgrx.com","qrcode":{"action_text":"Action text Action text max 30","header":"head head head max20","description":"description description description descr ption description desc max70","legal_disclaimer":"When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.","color_mode":"light"}};
   </script>
 
   <script>
@@ -1306,7 +1306,7 @@
 })();
 
   </script>
-<script type="text/javascript" charset="utf-8" src="./Microsite_0_video_f_files/webapis.js"></script></head>
+<script type="text/javascript" charset="utf-8" src="./Microsite_2-3_video_f_files/webapis.js"></script></head>
 
 <body onload="window.$SAMSUNG &amp;&amp; window.$SAMSUNG.onLoad &amp;&amp; window.$SAMSUNG.onLoad()" onkeydown="window.$SAMSUNG &amp;&amp; window.$SAMSUNG.onKeyDown &amp;&amp; window.$SAMSUNG.onKeyDown(event)">
 
@@ -1314,7 +1314,7 @@
   <div id="log"></div>
 
   <!-- Native-resolution background layer (see _hydrator.js#applyNativeBackground) -->
-  <div id="micrositeBackground"><img src="./Microsite_0_video_f_files/3c783c6c6d02de0a75093d7a89298c92.jpg" style="width:100%;height:100%;object-fit:cover" alt=""></div>
+  <div id="micrositeBackground"><img src="./Microsite_2-3_video_f_files/3c783c6c6d02de0a75093d7a89298c92.jpg" style="width:100%;height:100%;object-fit:cover" alt=""></div>
 
   <!-- Main layout -->
   <div class="microsite qr-light" style="transform: scale(0.611979); margin-left: 0px; margin-top: 0px;">
@@ -1328,11 +1328,11 @@
              The <video> element itself stays in the DOM regardless — VideoTracker/
              VideoControls/MicrositeVideoHandler all resolve it once at load time and
              expect it to exist even on a video-less microsite. -->
-        <div class="videoContainer" data-section="video" style="display:none">
+        <div class="videoContainer" data-section="video">
           <video id="videoPlayerBox" preload="auto" autoplay="" ontimeupdate="VideoControls.updateProgressBar()">
-            <source id="videoPlayer" src="" type="video/mp4">
+            <source id="videoPlayer" src="microsite_assets/8aef151250e2ae887c4b8a57b657d64d.mp4" type="video/mp4">
           </video>
-          <div id="videoLoader"></div>
+          <div id="videoLoader" style="background-image: none; display: none;"></div>
 
           <div id="videoControl" data-section="controls">
             <a href="javascript:void(0);"><button id="fullscreen" type="button">[ ]</button></a>
@@ -1343,11 +1343,17 @@
               </button>
             </a>
             <a href="javascript:void(0);"><button id="rewind" type="button">↻</button></a>
-            <span id="videoDuration">00:00:00 / 00:00:00</span>
-            <progress id="progressBar" value="0" min="0" max="100" style="appearance: none;"></progress>
+            <span id="videoDuration">00:00:02 / 00:00:00</span>
+            <progress id="progressBar" value="96.05948113580317" min="0" max="100" style="appearance: none;"></progress>
           </div>
         </div>
 
+        <!-- Video thumbnail strip -->
+        <div class="videoThumbnails" data-section="videos">
+          <a href="javascript:void(0);" class=""><img id="vidTh1" alt="Video 1" src="http://localhost:3000/microsite_preview.html" class="selected" style="cursor: pointer;"><div class="shadowOverlay" style="background-image:url(&#39;&#39;)"></div><span class="nowPlayingLabel">Now playing</span></a>
+          <a href="javascript:void(0);" class="nowPlaying"><img id="vidTh2" alt="Video 2" src="http://localhost:3000/microsite_preview.html" style="cursor: pointer;"><div class="shadowOverlay" style="background-image:url(&#39;&#39;)"></div><span class="nowPlayingLabel">Now playing</span></a>
+          <a href="javascript:void(0);" class=""><img id="vidTh3" alt="Video 3" src="http://localhost:3000/microsite_preview.html" style="cursor: pointer;"><div class="shadowOverlay" style="background-image:url(&#39;&#39;)"></div><span class="nowPlayingLabel">Now playing</span></a>
+        </div>
 
       </div>
 
@@ -1356,10 +1362,10 @@
     <!-- Exit button — top right (last in nav order) -->
     <div data-section="exit">
       <a href="javascript:void(0);">
-        <div id="exitButton" class="navigable selected" title="Exit">↩</div>
+        <div id="exitButton" class="navigable" title="Exit">↩</div>
       </a>
     </div>
-  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 144px; top: 584px; width: 872px;"><div id="qrCodeCore" style="min-height: 352px; width: 307px;"><div id="qrCodeCard" style="margin: 16px 16px 0px;"><canvas id="qrCodeCanvas" width="275" height="275"></canvas></div><div id="qrCodeActionText" style="font-size: 24px; margin: 12px 20px 8px;">Action text Action text max 30</div></div><div id="qrCodeInfo"><div id="qrCodeHeader" style="font-size: 40px;">head head head max20</div><div id="qrCodeDescription" style="font-size: 24px;">description description description descr ption description desc max70</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
+  <div id="qrCodeSection" data-section="qr" data-scans-url="http://rtb-canary.adgrx.com/scans?target_url=https%3A%2F%2Fwww.samsung.com" style="left: 1184px; top: 719px; width: 648px; flex-direction: row-reverse;"><div id="qrCodeCore" style="min-height: 252px; width: 220px;"><div id="qrCodeCard" style="margin: 8px;"><canvas id="qrCodeCanvas" width="204" height="204"></canvas></div><div id="qrCodeActionText" style="margin: 8px 16px;">Action text Action text max 30</div></div><div id="qrCodeInfo" style="padding: 0px 33px 0px 0px;"><div id="qrCodeHeader">head head head max20</div><div id="qrCodeDescription">description description description descr ption description desc max70</div></div></div><div id="qrCodeLegalDisclaimer">When you scan this QR code, Samsung will briefly log that a scan took place for measurement purposes, but this cannot be linked back to your mobile or CTV device.</div></div>
 
   <script>
     // CORE-TIZEN — ES5
@@ -4652,6 +4658,6 @@ qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
   }());
   /* ---- end browser-preview shim ---- */
 </script>
-
+<img id="videoUrlHint" src="./Microsite_2-3_video_f_files/8aef151250e2ae887c4b8a57b657d64d.mp4" style="display:none;width:0;height:0" alt="">
 
 </body></html>

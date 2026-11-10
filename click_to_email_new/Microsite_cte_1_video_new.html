@@ -1545,8 +1545,8 @@
               </button>
             </a>
             <a href="javascript:void(0);"><button id="rewind" type="button">↻</button></a>
-            <span id="videoDuration">00:00:04 / 00:00:00</span>
-            <progress id="progressBar" value="100" min="0" max="100" style="appearance: none;"></progress>
+            <span id="videoDuration">00:00:00 / 00:00:00</span>
+            <progress id="progressBar" value="12.254920079920081" min="0" max="100" style="appearance: none;"></progress>
           </div>
         </div>
 
@@ -1561,7 +1561,7 @@
         <div id="exitButton" class="navigable" title="Exit">↩</div>
       </a>
     </div>
-  <div id="emailCtaSection" class="email-cta-videos-1" data-section="email-cta"><div id="emailCtaButtonSection"><div id="emailCtaButton" role="button" class="cta-btn is-focused navigable selected"><div class="cta-btn-bg"></div><div class="cta-btn-label">Send me email</div></div><div id="emailCtaEmail">sam***@gmail.com</div></div><div id="emailCtaActionText">Get the offer in your inbox</div></div><div id="emailCtaPopup" class="is-hidden" role="dialog" aria-modal="true"><div id="emailCtaPopupHeadline">Send email?</div><div id="emailCtaPopupBody">We will send the offer details to your Samsung account email address: sam***@gmail.com</div><div id="emailCtaPopupButtons"><div id="emailCtaPopupSendBtn" role="button" class="cta-btn is-focused"><div class="cta-btn-bg"></div><div class="cta-btn-label">Send</div></div><div id="emailCtaPopupCancelBtn" role="button" class="cta-btn is-normal"><div class="cta-btn-bg"></div><div class="cta-btn-label">Cancel</div></div></div></div><div id="emailCtaNotification" class="is-hidden" role="status" aria-live="polite"><div id="emailCtaNotificationMessage"><div id="emailCtaNotificationHeadline"></div><div id="emailCtaNotificationBody"></div></div></div><div id="emailCtaLegalDisclaimer" class="">By continuing you agree to receive this one-time email from the advertiser.</div></div>
+  <div id="emailCtaSection" class="email-cta-videos-1" data-section="email-cta"><div id="emailCtaButtonSection"><div id="emailCtaButton" role="button" class="cta-btn is-focused navigable selected"><div class="cta-btn-bg"></div><div class="cta-btn-label">Send me email</div></div><div id="emailCtaEmail">s***@gmail.com</div></div><div id="emailCtaActionText">Get the offer in your inbox</div></div><div id="emailCtaPopup" class="is-hidden" role="dialog" aria-modal="true"><div id="emailCtaPopupHeadline">Send email?</div><div id="emailCtaPopupBody">We will send the offer details to your Samsung account email address: s***@gmail.com</div><div id="emailCtaPopupButtons"><div id="emailCtaPopupSendBtn" role="button" class="cta-btn is-focused"><div class="cta-btn-bg"></div><div class="cta-btn-label">Send</div></div><div id="emailCtaPopupCancelBtn" role="button" class="cta-btn is-normal"><div class="cta-btn-bg"></div><div class="cta-btn-label">Cancel</div></div></div></div><div id="emailCtaNotification" class="is-hidden" role="status" aria-live="polite"><div id="emailCtaNotificationMessage"><div id="emailCtaNotificationHeadline"></div><div id="emailCtaNotificationBody"></div></div></div><div id="emailCtaLegalDisclaimer" class="">By continuing you agree to receive this one-time email from the advertiser.</div></div>
 
   <script>
     // CORE-TIZEN — ES5
@@ -4007,18 +4007,19 @@ var MicrositeUserInput = (function () {
  *     practice a microsite has one or the other).
  *
  * Container bridge (ad-agent iframe parent, via window.postMessage):
- *   -> {"getEmailRegisterData":""}                 <- {type:"emailRegisterData", canSendEmail, maskedEmail}
+ *   -> {"getEmailRegisterData":""}                 <- {type:"emailRegisterData", canSendEmail, maskedEmail, error}
  *     canSendEmail is true only when the viewer is signed in AND the container
  *     holds what it needs to send (OSP credentials and the endpoint); the
  *     section is shown only then, so there is no separate sign-in flag.
- *     maskedEmail carries the viewer's address (empty unless canSendEmail);
- *     the container may send it raw or already masked. maskEmail() below
- *     normalises it client-side and passes already-masked values through.
- *     error says why canSendEmail is false. NotLoggedIn is final (the sign-in
- *     state is fixed once the container starts), every other reason may be
- *     transient (the container's config request failed, and it tries again on
- *     every new question), so those are asked again, see EMAIL_DATA_*.
- *   -> {"sendEmail":{flightId, creativeId}}         <- {type:"sendEmailResult", ok, error}
+ *     maskedEmail carries the viewer's address, masked by the container (empty
+ *     unless canSendEmail). maskEmail() below masks a raw address and passes an
+ *     already-masked one through.
+ *     error says why canSendEmail is false (empty when it is true). NotLoggedIn
+ *     is final (the sign-in state is fixed once the container starts), every
+ *     other reason may be transient (the container's config request failed, and
+ *     it tries again on every new question), so those are asked again, see
+ *     EMAIL_DATA_*.
+ *   -> {"sendEmail":{flightId, creativeId}}         <- {type:"sendEmailResult", ok, status, error}
  * flightId/creativeId are read from window._ms.params (set by _hydrator.js),
  * the same delivery-macro tokens _qr_code.js already reads — the container
  * adds the OSP token, user id and endpoint itself; this page never sees them.
@@ -4061,11 +4062,11 @@ var MicrositeUserInput = (function () {
     if (parts.length !== 2 || !parts[0]) return String(email || "");
     var local = parts[0];
 
-    // Defensive: the container may send an already-masked address (the older
-    // contract). Masking a masked value corrupts it (a*** -> a*****,
-    // *** -> ****), so a local part that already contains "*" is passed
-    // through unchanged. (A "*" in a raw local part is legal but practically
-    // non-existent, so this never misfires on real addresses.)
+    // The container sends an already-masked address. Masking a masked value
+    // corrupts it (a*** -> a*****, *** -> ****), so a local part that already
+    // contains "*" is passed through unchanged. (A "*" in a raw local part is
+    // legal but practically non-existent, so this never misfires on real
+    // addresses.)
     if (local.indexOf("*") !== -1) return String(email);
 
     var prefix =
@@ -4073,14 +4074,15 @@ var MicrositeUserInput = (function () {
     return prefix + "***@" + parts[1];
   }
 
+  // Longer than the container's own worst case for one sendEmail (config 3 s,
+  // OSP token 8 s, POST 15 s), so its reply normally arrives first.
   var SEND_EMAIL_REPLY_TIMEOUT_MS = 30000;
 
   // The container answers getEmailRegisterData with canSendEmail: false either
   // for good (the viewer is signed out) or for a reason that may pass (its config
-  // request failed or timed out). Only the second is worth asking about again, a
-  // couple of times, then give up (the section simply stays hidden). A reply
-  // without an error code counts as the second: a container that does not send
-  // one is still asked again, within the same limit.
+  // request failed or timed out). Only the second is asked about again, up to
+  // EMAIL_DATA_MAX_ATTEMPTS times in total, then the section simply stays hidden.
+  // A reply without an error code counts as the second.
   var EMAIL_DATA_MAX_ATTEMPTS = 3;
   var EMAIL_DATA_RETRY_DELAY_MS = 5000;
   var EMAIL_DATA_FINAL_ERROR = "NotLoggedIn";
@@ -4611,23 +4613,65 @@ var MicrositeUserInput = (function () {
   /* ---- browser-preview shim (injected by rake microsites:preview_click_to_email) ---- */
   (function () {
     // Click-to-email: there is no ad container in a desktop browser to answer
-    // getEmailRegisterData, so fake a signed-in viewer. flightId/creativeId are
-    // defaulted here (top level, before DOMContentLoaded) because _email_cta.js
-    // reads them once at init. Add ?mockSend=1 (ok), ?mockSend=ratelimited or
-    // ?mockSend=error to also fake the sendEmail reply; without it the send is
-    // left unanswered.
+    // getEmailRegisterData / sendEmail, so fake it with the same reply shapes
+    // and error codes the container uses. flightId/creativeId are defaulted
+    // here (top level, before DOMContentLoaded) because _email_cta.js reads
+    // them once at init.
+    //
+    // ?mockCanSend= (getEmailRegisterData; default: signed in, can send)
+    //   notloggedin  canSendEmail: false, error NotLoggedIn (final, no retry)
+    //   configfail   canSendEmail: false, error ConfigFetchFailed on every ask
+    //   configflaky  ConfigFetchFailed on the first two asks, then success
+    //                (the microsite asks up to 3 times, 5 s apart)
+    // ?mockSend= (sendEmail; default: the send is left unanswered)
+    //   1            200, e-mail accepted
+    //   ratelimited  208, RateLimited
+    //   error        500, HttpStatus
+    //   busy         Busy (another send in flight)
+    //   timeout      the OSP token call timed out, error Timeout
+    //   noreply      no reply at all, so the microsite's own NoReply timeout fires
     var emailCta = window.payload && window.payload.emailCta;
     if (emailCta && Object.keys(emailCta).length > 0) {
       var msParams = (window._ms && window._ms.params) || {};
       msParams.flightId = msParams.flightId || '1';
       msParams.creativeId = msParams.creativeId || '1';
 
-      var mockSend = new URLSearchParams(window.location.search).get('mockSend');
+      var query = new URLSearchParams(window.location.search);
+      var mockSend = query.get('mockSend');
+      var mockCanSend = query.get('mockCanSend');
+      var CONTAINER_DELAY_MS = 300; // the container waits for its OSP config call
+      var askCount = 0;
+
       var sendReplies = {
-        '1':           { ok: true },
-        'ratelimited': { ok: false, error: 'RateLimited' },
-        'error':       { ok: false, error: 'Boom' }
+        '1':           { ok: true,  status: 200, error: '' },
+        'ratelimited': { ok: false, status: 208, error: 'RateLimited' },
+        'error':       { ok: false, status: 500, error: 'HttpStatus' },
+        'busy':        { ok: false, status: 0,   error: 'Busy' },
+        'timeout':     { ok: false, status: 0,   error: 'Timeout' }
       };
+
+      // Same masking as the container: first char + *** + the domain.
+      function containerMask(email) {
+        var at = email.indexOf('@');
+        return email.charAt(0) + '***' + email.slice(at);
+      }
+
+      function emailRegisterDataReply() {
+        askCount += 1;
+        if (mockCanSend === 'notloggedin') {
+          return { canSendEmail: false, maskedEmail: '', error: 'NotLoggedIn' };
+        }
+        if (mockCanSend === 'configfail' || (mockCanSend === 'configflaky' && askCount <= 2)) {
+          return { canSendEmail: false, maskedEmail: '', error: 'ConfigFetchFailed' };
+        }
+        return { canSendEmail: true, maskedEmail: containerMask('samsung@gmail.com'), error: '' };
+      }
+
+      // '*' because the preview page is its own parent; the real container
+      // replies to the microsite origin only.
+      function reply(body) {
+        setTimeout(function () { window.postMessage(JSON.stringify(body), '*'); }, CONTAINER_DELAY_MS);
+      }
 
       window.addEventListener('message', function (event) {
         var msg = event.data;
@@ -4635,22 +4679,13 @@ var MicrositeUserInput = (function () {
         try { msg = JSON.parse(msg); } catch (e) { return; }
 
         if (msg && msg.getEmailRegisterData !== undefined) {
-          // One answer decides everything: canSendEmail: true already means the
-          // viewer is signed in and the container could send (see onEmailRegisterData
-          // in _email_cta.js). Raw address on purpose — the microsite masks it
-          // client-side (maskEmail in _email_cta.js) -> displayed as sam***@gmail.com.
-          window.postMessage(
-            JSON.stringify({
-              type: 'emailRegisterData',
-              canSendEmail: true,
-              maskedEmail: 'samsung@gmail.com'
-            }),
-            '*'
-          );
+          var data = emailRegisterDataReply();
+          data.type = 'emailRegisterData';
+          reply(data);
         } else if (msg && msg.sendEmail && sendReplies[mockSend]) {
-          var reply = { type: 'sendEmailResult' };
-          Object.keys(sendReplies[mockSend]).forEach(function (k) { reply[k] = sendReplies[mockSend][k]; });
-          window.postMessage(JSON.stringify(reply), '*');
+          var result = { type: 'sendEmailResult' };
+          Object.keys(sendReplies[mockSend]).forEach(function (k) { result[k] = sendReplies[mockSend][k]; });
+          reply(result);
         }
       });
     }

@@ -1107,12 +1107,29 @@
  *     webapis.sso login state lets the container send the coupon by mail.
  *   sendEmailResult reply: ok, status, error — result of the actual send
  *     (webapis.sso.getOspAccessToken() + the container's fetch to click2email).
+ *
+ * All fields start at "-" (never received) and simply stay that way when there
+ * is no container to answer — e.g. lib/tasks/microsites_click_to_email.rake's
+ * plain `rake microsites:preview_click_to_email` output opened straight from
+ * disk, file://, with no ad-agent iframe parent. The panel still renders in
+ * that case (see window.__FORCE_DEBUG_PANEL__ below) precisely so that "nothing
+ * answered" is visible on screen instead of looking like the panel is broken.
  */
 (function () {
   "use strict";
 
-  var params = (window._ms && window._ms.params) || {};
-  if (params.debug !== "1") return;
+  // Shown whenever ?debug=1 is set (real microsite, same convention
+  // _email_cta.js's own debug-only error detail uses) OR
+  // window.__FORCE_DEBUG_PANEL__ is set — lib/tasks/microsites_click_to_email.rake's
+  // browser shim sets this unconditionally, since that task is dev-only tooling
+  // and never generates a microsite shown to a real viewer. Read at init() time
+  // (deferred to DOMContentLoaded below), not here at parse time, because the
+  // shim is injected just before the closing body tag and only runs once body
+  // parsing reaches it — after this script (in <head>) has already parsed.
+  function debugEnabled() {
+    var params = (window._ms && window._ms.params) || {};
+    return params.debug === "1" || window.__FORCE_DEBUG_PANEL__ === true;
+  }
 
   var MAX_ENTRIES = 30;
 
@@ -1335,6 +1352,8 @@
   }
 
   function init() {
+    if (!debugEnabled()) return;
+
     ensurePanel();
     readWindowName();
     renderStateBox();
@@ -1343,10 +1362,15 @@
     requestGuid();
   }
 
-  if (document.readyState === "complete" || document.readyState === "interactive") {
-    init();
-  } else {
+  // window.__FORCE_DEBUG_PANEL__, if the shim sets it at all, is only set by an
+  // inline script right before the closing body tag — after this script (loaded
+  // in <head>) has already run, so init() cannot run until the rest of the
+  // document (and that flag) exists. "loading" always defers; "interactive"/
+  // "complete" only happen once the full document, body included, has parsed.
+  if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
 })();
 
@@ -1872,7 +1896,7 @@
   <div id="micrositeBackground"></div>
 
   <!-- Main layout -->
-  <div class="microsite email-cta-light" style="transform: scale(0.177778); margin-left: 0px; margin-top: 0px;">
+  <div class="microsite email-cta-light" style="transform: scale(0.987963); margin-left: 0px; margin-top: 0px;">
 
     <!-- Left content area: video + thumbnails + apps -->
     <div id="contentLeft">
@@ -1898,8 +1922,8 @@
               </button>
             </a>
             <a href="javascript:void(0);"><button id="rewind" type="button">↻</button></a>
-            <span id="videoDuration">00:00:02 / 00:00:00</span>
-            <progress id="progressBar" value="51.776698301698296" min="0" max="100" style="appearance: none;"></progress>
+            <span id="videoDuration">00:00:04 / 00:00:00</span>
+            <progress id="progressBar" value="100" min="0" max="100" style="appearance: none;"></progress>
           </div>
         </div>
 
@@ -4966,6 +4990,12 @@ var MicrositeUserInput = (function () {
 <script>
   /* ---- browser-preview shim (injected by rake microsites:preview_click_to_email) ---- */
   (function () {
+    // This task is dev-only tooling: its output is never a microsite shown to a
+    // real viewer, so always show the postMessage debug panel (_debug_panel.js)
+    // here, with no need to add ?debug=1 by hand — including when nothing below
+    // answers the microsite's questions at all (fields simply stay at "-").
+    window.__FORCE_DEBUG_PANEL__ = true;
+
     // Click-to-email: there is no ad container in a desktop browser to answer
     // getEmailRegisterData / sendEmail, so fake it with the same reply shapes
     // and error codes the container uses. flightId/creativeId are defaulted
@@ -5078,4 +5108,4 @@ var MicrositeUserInput = (function () {
 </script>
 
 
-</body></html>
+<div id="debugPostMessagePanel" style="position: fixed; top: 0px; left: 0px; width: 560px; max-height: 460px; overflow-y: auto; background: rgba(0, 0, 0, 0.85); color: rgb(153, 255, 153); font: 11px / 1.4 monospace; padding: 8px; z-index: 999999; pointer-events: none; white-space: pre-wrap; word-break: break-word;"><div style="color: rgb(255, 255, 255); font-weight: bold; margin-bottom: 4px;">postMessage debug (?debug=1)</div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px;">coupon state (Tizen webapis, via container)</div><div style="color: rgb(255, 255, 221); margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px;"><div>serverType: -</div><div>sessionId: -</div><div>agTid: -</div><div>guid: -</div><div>ssoid: -</div><div>co: -</div><div>lang: -</div><div>firmcode: -</div><div>model: -</div><div>canSendEmail: true</div><div>maskedEmail: s***@gmail.com</div><div>emailRegisterData.error: (empty)</div><div>sendEmailResult.ok: -</div><div>sendEmailResult.status: -</div><div>sendEmailResult.error: -</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px;">message log</div><div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[11:29:05.937] -&gt; container {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[11:29:05.949] -&gt; container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[11:29:05.951] &lt;- container {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[11:29:05.952] &lt;- container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[11:29:06.252] -&gt; container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[11:29:06.252] &lt;- container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div></div></div></body></html>

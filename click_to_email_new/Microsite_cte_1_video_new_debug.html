@@ -1708,17 +1708,25 @@
     sendEmailOk: null,
     sendEmailStatus: null,
     sendEmailError: null,
+    rawWindowName: null,
+    hasParent: null,
   };
 
   function readWindowName() {
+    state.rawWindowName = window.name || "(empty)";
+    state.hasParent = window.parent !== window;
+
     try {
       var parsed = JSON.parse(window.name || "");
       state.serverType = parsed.serverType || "";
       state.sessionId = parsed.sessionId || "";
       state.agTid = parsed.agTid || "";
     } catch (e) {
-      // window.name is not container-supplied JSON (e.g. opened as a bare preview
-      // file, no iframe parent) — leave the state fields at null (shown as "-").
+      // window.name is not container-supplied JSON — e.g. opened as a bare
+      // preview file with no iframe parent (rawWindowName will read "(empty)"),
+      // or a real container that, for whatever reason, did not set it. Either
+      // way, rawWindowName/hasParent above say which, instead of leaving only
+      // dashes with no way to tell those two cases apart.
     }
   }
 
@@ -1752,6 +1760,13 @@
   function renderStateBox() {
     stateBox.innerHTML = "";
     var rows = [
+      // Diagnostic, not container data: says whether this page is even embedded
+      // in a parent frame at all, and what window.name held at init — "-" on
+      // every field below this point with hasParent: true and a non-"(empty)"
+      // rawWindowName means messages are not making the round trip; hasParent:
+      // false means there is no container to talk to in the first place.
+      ["[diag] window.parent !== window", state.hasParent],
+      ["[diag] window.name (raw)", state.rawWindowName],
       ["serverType", state.serverType],
       ["sessionId", state.sessionId],
       ["agTid", state.agTid],
@@ -1895,7 +1910,7 @@
   init();
 })();
 
-  </script><div id="debugPostMessagePanel" style="position: fixed; top: 0px; left: 0px; width: 560px; max-height: 460px; overflow-y: auto; background: rgba(0, 0, 0, 0.85); color: rgb(153, 255, 153); font: 11px / 1.4 monospace; padding: 8px; z-index: 999999; pointer-events: none; white-space: pre-wrap; word-break: break-word;"><div style="color: rgb(255, 255, 255); font-weight: bold; margin-bottom: 4px;">postMessage debug (?debug=1)</div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px;">coupon state (Tizen webapis, via container)</div><div style="color: rgb(255, 255, 221); margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px;"><div>serverType: -</div><div>sessionId: -</div><div>agTid: -</div><div>guid: -</div><div>ssoid: -</div><div>co: -</div><div>lang: -</div><div>firmcode: -</div><div>model: -</div><div>canSendEmail: true</div><div>maskedEmail: s***@gmail.com</div><div>emailRegisterData.error: (empty)</div><div>sendEmailResult.ok: -</div><div>sendEmailResult.status: -</div><div>sendEmailResult.error: -</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px;">message log</div><div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:36:14.481] -&gt; container {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:36:14.514] -&gt; container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:36:14.521] &lt;- container {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:36:14.522] &lt;- container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:36:14.822] -&gt; container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:36:14.822] &lt;- container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div></div></div>
+  </script><div id="debugPostMessagePanel" style="position: fixed; top: 0px; left: 0px; width: 560px; max-height: 460px; overflow-y: auto; background: rgba(0, 0, 0, 0.85); color: rgb(153, 255, 153); font: 11px / 1.4 monospace; padding: 8px; z-index: 999999; pointer-events: none; white-space: pre-wrap; word-break: break-word;"><div style="color: rgb(255, 255, 255); font-weight: bold; margin-bottom: 4px;">postMessage debug (?debug=1)</div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px;">coupon state (Tizen webapis, via container)</div><div style="color: rgb(255, 255, 221); margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px;"><div>[diag] window.parent !== window: false</div><div>[diag] window.name (raw): (empty)</div><div>serverType: -</div><div>sessionId: -</div><div>agTid: -</div><div>guid: -</div><div>ssoid: -</div><div>co: -</div><div>lang: -</div><div>firmcode: -</div><div>model: -</div><div>canSendEmail: true</div><div>maskedEmail: s***@gmail.com</div><div>emailRegisterData.error: (empty)</div><div>sendEmailResult.ok: -</div><div>sendEmailResult.status: -</div><div>sendEmailResult.error: -</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px;">message log</div><div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[13:01:28.040] -&gt; container {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[13:01:28.066] -&gt; container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[13:01:28.072] &lt;- container {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[13:01:28.073] &lt;- container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[13:01:28.373] -&gt; container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[13:01:28.374] &lt;- container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div></div></div>
 
   <a id="House_OnKey" href="javascript:void;">&nbsp;</a>
   <div id="log"></div>
@@ -1904,7 +1919,7 @@
   <div id="micrositeBackground"></div>
 
   <!-- Main layout -->
-  <div class="microsite email-cta-light" style="transform: scale(1.0213); margin-left: 0px; margin-top: 0px;">
+  <div class="microsite email-cta-light" style="transform: scale(0.987963); margin-left: 0px; margin-top: 0px;">
 
     <!-- Left content area: video + thumbnails + apps -->
     <div id="contentLeft">

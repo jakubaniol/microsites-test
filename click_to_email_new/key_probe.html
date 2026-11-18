@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>key probe</title>
+<style>
+  html, body { margin: 0; background: #000; color: #9f9; font: 26px/1.35 monospace; }
+  #head { padding: 16px 24px; color: #fff; border-bottom: 2px solid #555; }
+  #log { padding: 8px 24px; }
+  .k { color: #fc6; }
+  .e { color: #6cf; }
+</style>
+</head>
+<body>
+<div id="head">key probe - no CTA, no video, no container messages. Elapsed: <span id="t">0.0</span> s</div>
+<div id="log"></div>
+<script>
+(function () {
+  var t0 = Date.now();
+  var log = document.getElementById("log");
+  var tick = document.getElementById("t");
+
+  function elapsed() { return ((Date.now() - t0) / 1000).toFixed(3); }
+
+  function add(cls, text) {
+    var d = document.createElement("div");
+    d.className = cls;
+    d.textContent = "[+" + elapsed() + "s] " + text;
+    log.insertBefore(d, log.firstChild);
+    while (log.childNodes.length > 25) log.removeChild(log.lastChild);
+  }
+
+  setInterval(function () { tick.textContent = ((Date.now() - t0) / 1000).toFixed(1); }, 100);
+
+  add("e", "script start | window.parent !== window: " + (window.parent !== window) + " | window.name: " + (window.name || "(empty)"));
+
+  ["keydown", "keypress", "keyup"].forEach(function (type) {
+    document.addEventListener(type, function (ev) {
+      var clock = ev.timeStamp > 1e12 ? Date.now() : (window.performance && performance.now ? performance.now() : null);
+      var age = clock != null ? Math.round(clock - ev.timeStamp) : "?";
+      var ae = document.activeElement ? document.activeElement.tagName : "none";
+      add("k", type + " keyCode=" + ev.keyCode + " key=" + ev.key + " code=" + ev.code +
+        " isTrusted=" + ev.isTrusted + " repeat=" + ev.repeat + " age=" + age + "ms" +
+        " hasFocus=" + document.hasFocus() + " active=" + ae);
+    }, true);
+  });
+
+  window.addEventListener("load", function () { add("e", "window load"); });
+  window.addEventListener("focus", function () { add("e", "window focus"); });
+  window.addEventListener("blur", function () { add("e", "window blur"); });
+  document.addEventListener("visibilitychange", function () { add("e", "visibility: " + document.visibilityState); });
+})();
+</script>
+</body>
+</html>

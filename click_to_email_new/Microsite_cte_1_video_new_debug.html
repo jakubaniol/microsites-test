@@ -1594,7 +1594,7 @@
        browser finishes parsing everything ahead of it, which on a slow connection can
        take a very visible while even though the panel's own code is instant. -->
   <script>
-    window.__DEBUG_PANEL_BUILT_AT__ = "2026-11-18 12:39:16 CET";
+    window.__DEBUG_PANEL_BUILT_AT__ = "2026-11-18 12:52:01 CET";
     /**
  * postMessage debug panel — on-screen log of the container <-> microsite bridge
  * traffic (_platform_adapter.js's registerKey/close/launchBrowser/launchApp,
@@ -1721,6 +1721,8 @@
     sendEmailError: null,
     rawWindowName: null,
     hasParent: null,
+    viewport: null,
+    popupGeometry: null,
   };
 
   function readWindowName() {
@@ -1778,6 +1780,8 @@
       // false means there is no container to talk to in the first place.
       ["[diag] window.parent !== window", state.hasParent],
       ["[diag] window.name (raw)", state.rawWindowName],
+      ["[diag] viewport / .microsite", state.viewport],
+      ["[diag] popup", state.popupGeometry],
       ["serverType", state.serverType],
       ["sessionId", state.sessionId],
       ["agTid", state.agTid],
@@ -2025,6 +2029,44 @@
     });
   }
 
+  // Where the confirmation popup actually is on this device. Answers "it opened
+  // (step 1 -> 2) but I cannot see it": a popup that is hidden shows display:none or
+  // a zero-size rect; one that is open but off-screen shows a rect outside the
+  // viewport; one that is just covered shows a normal rect with display:flex.
+  function describePopup() {
+    var popup = document.getElementById("emailCtaPopup");
+    var ms = document.querySelector(".microsite");
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    state.viewport =
+      vw + "x" + vh + (ms ? " | .microsite " + Math.round(ms.getBoundingClientRect().width) + "px wide" : " | no .microsite");
+
+    if (!popup) {
+      state.popupGeometry = "not in DOM";
+      return;
+    }
+    var cs = window.getComputedStyle(popup);
+    var r = popup.getBoundingClientRect();
+    state.popupGeometry =
+      "class='" + popup.className + "' display=" + cs.display + " visibility=" + cs.visibility +
+      " opacity=" + cs.opacity + " z=" + cs.zIndex +
+      " rect x=" + Math.round(r.left) + " y=" + Math.round(r.top) +
+      " w=" + Math.round(r.width) + " h=" + Math.round(r.height);
+  }
+
+  function startPopupWatch() {
+    function tick() {
+      try {
+        describePopup();
+        renderStateBox();
+      } catch (e) {
+        // never let a diagnostics refresh break the page
+      }
+    }
+    tick();
+    setInterval(tick, 500);
+  }
+
   function init() {
     if (!debugEnabled()) return;
 
@@ -2037,6 +2079,7 @@
     hookOutgoing();
     hookIncoming();
     requestGuid();
+    startPopupWatch();
   }
 
   // No DOMContentLoaded wait: microsite.html.erb places this script first in
@@ -2046,7 +2089,7 @@
   init();
 })();
 
-  </script><div id="debugPostMessagePanel" style="position: fixed; top: 0px; left: 0px; width: 928px; height: 100%; box-sizing: border-box; overflow: hidden; display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.85); color: rgb(153, 255, 153); font: 16px / 1.4 monospace; padding: 10px; z-index: 999999; pointer-events: none; white-space: pre-wrap; word-break: break-word;"><div style="color: rgb(255, 255, 255); font-weight: bold; margin-bottom: 4px; flex: 0 0 auto;">postMessage debug (?debug=1)</div><div style="color: rgb(255, 255, 255); margin-bottom: 4px; flex: 0 0 auto;">file generated: 2026-11-18 12:39:16 CET</div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px; flex: 0 0 auto;">coupon state (Tizen webapis, via container)</div><div style="color: rgb(255, 255, 221); margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px; flex: 0 0 auto;"><div>[diag] window.parent !== window: false</div><div>[diag] window.name (raw): (empty)</div><div>serverType: -</div><div>sessionId: -</div><div>agTid: -</div><div>guid: -</div><div>ssoid: -</div><div>co: -</div><div>lang: -</div><div>firmcode: -</div><div>model: -</div><div>canSendEmail: true</div><div>maskedEmail: s***@gmail.com</div><div>emailRegisterData.error: (empty)</div><div>sendEmailResult.ok: -</div><div>sendEmailResult.status: -</div><div>sendEmailResult.error: -</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px; flex: 0 0 auto;">message log</div><div style="margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px; flex: 1 1 0px; min-height: 0px; overflow: hidden;"><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:39:51.735] container -&gt; microsite {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:39:51.733] microsite -&gt; container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:39:51.430] container -&gt; microsite {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:39:51.430] container -&gt; microsite {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:39:51.428] microsite -&gt; container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:39:51.410] microsite -&gt; container {"getGuid":""}</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px; flex: 0 0 auto;">console</div><div style="flex: 1 1 0px; min-height: 0px; overflow: hidden;"><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:52.380] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; step 1 -&gt; 2</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:39:52.380] [info] [key] keydown keyCode=13 (first) isTrusted=true repeat=false age=2ms</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.736] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; step 0 -&gt; 1</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.736] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; onEmailRegisterData {"canSendEmail":true,"error":"","hasMaskedEmail":true,"attempt":1}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.735] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; &lt;- message {"fromParent":true,"origin":"null","data":"{\"canSendEmail\":true,\"maskedEmail\":\"s***@gmail.com\",\"error\":\"\",\"type\":\"emailRegisterData\"}"}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.430] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; &lt;- message {"fromParent":true,"origin":"null","data":"{\"getEmailRegisterData\":\"\"}"}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.430] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; &lt;- message {"fromParent":true,"origin":"null","data":"{\"getGuid\":\"\"}"}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.429] [log] MicrositeNav - shiftFocusTo, section does not exist in navigation map:  videos</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.428] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; -&gt; postToContainer {"getEmailRegisterData":""} {"hasParent":false}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:39:51.428] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; init {"rawFlightId":"1","rawCreativeId":"1","flightId":1,"creativeId":1,"videoCount":1}</div></div></div>
+  </script><div id="debugPostMessagePanel" style="position: fixed; top: 0px; left: 0px; width: 928px; height: 100%; box-sizing: border-box; overflow: hidden; display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.85); color: rgb(153, 255, 153); font: 16px / 1.4 monospace; padding: 10px; z-index: 999999; pointer-events: none; white-space: pre-wrap; word-break: break-word;"><div style="color: rgb(255, 255, 255); font-weight: bold; margin-bottom: 4px; flex: 0 0 auto;">postMessage debug (?debug=1)</div><div style="color: rgb(255, 255, 255); margin-bottom: 4px; flex: 0 0 auto;">file generated: 2026-11-18 12:52:01 CET</div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px; flex: 0 0 auto;">coupon state (Tizen webapis, via container)</div><div style="color: rgb(255, 255, 221); margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px; flex: 0 0 auto;"><div>[diag] window.parent !== window: false</div><div>[diag] window.name (raw): (empty)</div><div>[diag] viewport / .microsite: 2060x1067 | .microsite 1897px wide</div><div>[diag] popup: class='' display=flex visibility=visible opacity=1 z=20 rect x=471 y=313 w=954 h=452</div><div>serverType: -</div><div>sessionId: -</div><div>agTid: -</div><div>guid: -</div><div>ssoid: -</div><div>co: -</div><div>lang: -</div><div>firmcode: -</div><div>model: -</div><div>canSendEmail: true</div><div>maskedEmail: s***@gmail.com</div><div>emailRegisterData.error: (empty)</div><div>sendEmailResult.ok: -</div><div>sendEmailResult.status: -</div><div>sendEmailResult.error: -</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px; flex: 0 0 auto;">message log</div><div style="margin-bottom: 6px; border-bottom: 1px solid rgb(85, 85, 85); padding-bottom: 6px; flex: 1 1 0px; min-height: 0px; overflow: hidden;"><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:52:03.079] container -&gt; microsite {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:52:03.078] microsite -&gt; container {"canSendEmail":true,"maskedEmail":"s***@gmail.com","error":"","type":"emailRegisterData"}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:52:02.778] container -&gt; microsite {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(153, 255, 153);">[12:52:02.777] container -&gt; microsite {"getGuid":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:52:02.771] microsite -&gt; container {"getEmailRegisterData":""}</div><div style="margin-bottom: 4px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:52:02.746] microsite -&gt; container {"getGuid":""}</div></div><div style="color: rgb(255, 204, 102); font-weight: bold; margin-bottom: 2px; flex: 0 0 auto;">console</div><div style="flex: 1 1 0px; min-height: 0px; overflow: hidden;"><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:07.059] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; step 1 -&gt; 2</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(102, 204, 255);">[12:52:07.058] [info] [key] keydown keyCode=13 (first) isTrusted=true repeat=false age=3ms</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:03.080] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; step 0 -&gt; 1</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:03.080] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; onEmailRegisterData {"canSendEmail":true,"error":"","hasMaskedEmail":true,"attempt":1}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:03.079] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; &lt;- message {"fromParent":true,"origin":"null","data":"{\"canSendEmail\":true,\"maskedEmail\":\"s***@gmail.com\",\"error\":\"\",\"type\":\"emailRegisterData\"}"}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:02.778] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; &lt;- message {"fromParent":true,"origin":"null","data":"{\"getEmailRegisterData\":\"\"}"}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:02.777] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; &lt;- message {"fromParent":true,"origin":"null","data":"{\"getGuid\":\"\"}"}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:02.772] [log] MicrositeNav - shiftFocusTo, section does not exist in navigation map:  videos</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:02.771] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; -&gt; postToContainer {"getEmailRegisterData":""} {"hasParent":false}</div><div style="margin-bottom: 3px; border-bottom: 1px solid rgb(51, 51, 51); padding-bottom: 2px; color: rgb(204, 204, 204);">[12:52:02.771] [log] %c C2E-DBG microsite  background:#1e88e5;color:#fff;font-weight:bold; init {"rawFlightId":"1","rawCreativeId":"1","flightId":1,"creativeId":1,"videoCount":1}</div></div></div>
 
   <a id="House_OnKey" href="javascript:void;">&nbsp;</a>
   <div id="log"></div>
@@ -2081,8 +2124,8 @@
               </button>
             </a>
             <a href="javascript:void(0);"><button id="rewind" type="button">↻</button></a>
-            <span id="videoDuration">00:00:01 / 00:00:00</span>
-            <progress id="progressBar" value="45.29875124875126" min="0" max="100" style="appearance: none;"></progress>
+            <span id="videoDuration">00:00:04 / 00:00:00</span>
+            <progress id="progressBar" value="100" min="0" max="100" style="appearance: none;"></progress>
           </div>
         </div>
 
